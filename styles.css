@@ -1270,6 +1270,7 @@ h2 {
   color: #fff7ef;
   font-size: clamp(54px, 8vw, 112px);
   line-height: 0.92;
+  white-space: nowrap;
 }
 
 .contact-lead {
@@ -2063,7 +2064,7 @@ h2 {
   }
 
   .contact-page h1 {
-    font-size: clamp(42px, 13vw, 58px);
+    font-size: clamp(32px, 9.7vw, 42px);
   }
 
   .contact-lead {
