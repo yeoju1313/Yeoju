@@ -2136,14 +2136,17 @@ body.privacy-open {
     gap: 0;
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
     transform: translateY(-8px);
-    transition: opacity 180ms ease, transform 180ms ease;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms;
     white-space: normal;
   }
 
   .site-header.is-nav-open .nav-links {
     opacity: 1;
     pointer-events: auto;
+    visibility: visible;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s;
     transform: translateY(0);
   }
 
