@@ -271,7 +271,13 @@ leadForms.forEach((form) => {
 });
 
 const revealTargets = new Set(document.querySelectorAll(".reveal"));
-document.querySelectorAll("main img").forEach((image) => revealTargets.add(image));
+document.querySelectorAll("main img").forEach((image) => {
+  // 메인 배너(hero)는 전용 등장 효과를 쓰므로 스크롤 reveal에서 제외
+  if (image.closest(".hero")) {
+    return;
+  }
+  revealTargets.add(image);
+});
 revealTargets.forEach((target) => target.classList.add("reveal"));
 
 // 이미지는 디코드가 끝난 뒤에 페이드를 시작해야 효과가 실제로 보인다.
