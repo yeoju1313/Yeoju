@@ -1381,15 +1381,18 @@ h2 {
 .location-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  width: min(100%, 1040px);
+  gap: clamp(12px, 1.4vw, 20px);
+  width: min(100%, 1400px);
   margin: 16px auto 0;
 }
 
 .location-cards img {
   display: block;
   width: 100%;
-  border-radius: 8px;
+  padding: clamp(6px, 1vw, 14px);
+  background: #ffffff;
+  border: 1px solid rgba(7, 61, 58, 0.16);
+  border-radius: 14px;
   box-shadow: var(--shadow);
 }
 
