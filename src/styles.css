@@ -1396,6 +1396,11 @@ h2 {
   text-align: center;
 }
 
+/* 전역 h2의 max-width:920px가 박스를 왼쪽에 붙게 해 title이 안 맞음 → 컨테이너 폭으로 풀어 중앙 정렬 */
+.document-stack .doc-heading h2 {
+  max-width: none;
+}
+
 /* 가로형 단지배치도는 더 넓게 확장 */
 .document-section > img.doc-wide {
   width: min(100%, 1680px);
