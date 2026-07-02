@@ -527,7 +527,7 @@ h2 {
   color: #fff7ef;
   font-size: 27px;
   font-weight: 900;
-  line-height: 0.9;
+  line-height: 1.05;
   transform: rotate(-4deg);
   animation: deadlinePulse 1.8s ease-in-out infinite;
 }
@@ -2636,6 +2636,18 @@ body.privacy-open {
   .plan-tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* 홍보센터는 탭 3개라 2열이면 2+1로 감쌈 → 3열 균등 */
+  .promo-center .plan-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .promo-center .tab {
+    min-width: 0;
+    padding: 0 6px;
+    font-size: 13px;
   }
 
   .tab {
