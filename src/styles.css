@@ -9,6 +9,10 @@
   --line: rgba(22, 36, 33, 0.14);
   --shadow: 0 24px 70px rgba(13, 35, 32, 0.18);
   --header-h: 76px;
+  /* 브로슈어(PREMIUM 6 / BENEFIT 7) 재현 전용 색 */
+  --bnav: #103a52;
+  --blime: #8ed13f;
+  --blime-ink: #5f9f27;
 }
 
 * {
@@ -433,7 +437,7 @@ h2 {
   padding: 0 18px;
   background: rgba(201, 120, 67, 0.96);
   color: #fff7ef;
-  font-size: clamp(18px, 2.1vw, 30px);
+  font-size: clamp(20px, 2.4vw, 34px);
   font-weight: 900;
   letter-spacing: 0.01em;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
@@ -1376,6 +1380,225 @@ h2 {
   border: 1px solid rgba(7, 61, 58, 0.16);
   border-radius: 14px;
   box-shadow: var(--shadow);
+}
+
+/* 여러 이미지를 세로로 쌓아 스크롤 리빌(단지배치도+동호수, 커뮤니티, 프리미엄) */
+.document-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(24px, 4vw, 52px);
+}
+
+.document-stack .doc-heading {
+  width: min(100%, 1400px);
+  margin: 0;
+  text-align: center;
+}
+
+/* 가로형 단지배치도는 더 넓게 확장 */
+.document-section > img.doc-wide {
+  width: min(100%, 1680px);
+}
+
+/* 유니트 실물 영상 (세로 9:16) */
+.unit-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 3vw, 40px);
+  width: min(100%, 900px);
+  margin: 0 auto;
+}
+
+.unit-video-card {
+  margin: 0;
+}
+
+.unit-video-card video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  background: #000;
+  box-shadow: var(--shadow);
+}
+
+.unit-video-card figcaption {
+  margin-top: 12px;
+  text-align: center;
+  color: var(--deep);
+  font-weight: 800;
+  font-size: clamp(15px, 1.4vw, 18px);
+}
+
+@media (max-width: 620px) {
+  .unit-video-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+}
+
+/* ===== 원본 브로슈어 재현: PREMIUM 6 / BENEFIT 7 ===== */
+.brochure-title {
+  margin: 0 0 clamp(24px, 4vw, 46px);
+  text-align: center;
+  color: var(--bnav);
+  font-size: clamp(28px, 4.4vw, 48px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+/* PREMIUM 6 - 원본 3열×2행 카드 */
+.pcard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2vw, 30px);
+  width: min(100%, 1200px);
+  margin: 0 auto;
+}
+
+.pcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(22px, 2.6vw, 38px) clamp(14px, 1.8vw, 26px) clamp(26px, 3vw, 40px);
+  border: 2px solid var(--blime);
+  border-radius: 24px;
+  background: #fff;
+}
+
+.pcard:nth-child(even) {
+  border-color: var(--bnav);
+}
+
+.pcard-icon {
+  width: clamp(66px, 7vw, 92px);
+}
+
+.pcard-icon img {
+  width: 100%;
+  height: auto;
+}
+
+.pcard-num {
+  margin-top: 12px;
+  color: var(--bnav);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 900;
+}
+
+.pcard-title {
+  margin: 2px 0 14px;
+  color: var(--bnav);
+  font-size: clamp(17px, 1.8vw, 23px);
+  font-weight: 800;
+}
+
+.pcard-desc {
+  margin: 0;
+  color: #3a4a4a;
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.6;
+}
+
+/* BENEFIT 7 - 원본 7열 스트립 */
+.bft-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: clamp(6px, 0.8vw, 12px);
+  width: min(100%, 1280px);
+  margin: 0 auto;
+  align-items: start;
+}
+
+.bft-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(12px, 1.4vw, 20px) clamp(6px, 0.8vw, 12px);
+  border: 2px dashed transparent;
+  border-radius: 14px;
+}
+
+.bft-item:nth-child(even) {
+  border-color: var(--bnav);
+}
+
+.bft-icon {
+  width: clamp(56px, 5.4vw, 80px);
+}
+
+.bft-icon img {
+  width: 100%;
+  height: auto;
+}
+
+.bft-title {
+  margin: 10px 0 4px;
+  color: var(--bnav);
+  font-size: clamp(14px, 1.35vw, 19px);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.bft-title .mu {
+  color: var(--blime-ink);
+}
+
+.bft-desc {
+  margin: 0;
+  color: #46565a;
+  font-size: clamp(11px, 0.95vw, 13px);
+  line-height: 1.5;
+}
+
+.bft-tagline {
+  margin-top: clamp(26px, 3.4vw, 46px);
+  text-align: center;
+}
+
+.bft-tag-sub {
+  margin: 0 0 10px;
+  color: var(--bnav);
+  font-size: clamp(14px, 1.4vw, 18px);
+  font-weight: 700;
+}
+
+.bft-tag-main {
+  margin: 0;
+  color: var(--bnav);
+  font-size: clamp(18px, 2.4vw, 32px);
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.bft-tag-main .lime {
+  color: var(--blime-ink);
+}
+
+@media (max-width: 900px) {
+  .pcard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bft-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .bft-item:nth-child(even) {
+    border-color: transparent;
+  }
+}
+
+@media (max-width: 560px) {
+  .pcard-grid {
+    grid-template-columns: 1fr;
+  }
+  .bft-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .location-cards {
