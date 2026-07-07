@@ -296,11 +296,24 @@ const showTarget = (target) => {
 if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
     (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          showTarget(entry.target);
-          observer.unobserve(entry.target);
-        }
+      // 같은 배치에 함께 들어온 요소는 문서 순서대로 시차를 두고 등장
+      // (프리미엄 1~6 카드처럼 화면에 동시에 잡혀도 1번부터 차례로 나타난다)
+      const incoming = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) =>
+          a.target.compareDocumentPosition(b.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
+        );
+      incoming.forEach((entry, index) => {
+        entry.target.style.transitionDelay = `${index * 180}ms`;
+        entry.target.addEventListener(
+          "transitionend",
+          () => {
+            entry.target.style.transitionDelay = "";
+          },
+          { once: true }
+        );
+        showTarget(entry.target);
+        observer.unobserve(entry.target);
       });
     },
     // threshold는 요소 면적 대비 비율이라 뷰포트보다 큰 세로 이미지는

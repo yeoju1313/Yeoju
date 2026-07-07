@@ -4,6 +4,7 @@
   --river: #1c8178;
   --leaf: #8da672;
   --copper: #c97843;
+  --plum: #9c1a5e;       /* 진한 자주색 — 마감임박/가격 강조 */
   --paper: #f4f7ee;
   --mist: #eaf4e1;
   --line: rgba(22, 36, 33, 0.14);
@@ -520,6 +521,17 @@ h2 {
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
 }
 
+.hero-tagline {
+  margin: 0 0 12px;
+  color: #fff7ef;
+  font-family: "Gowun Batang", serif;
+  font-size: clamp(17px, 2.1vw, 30px);
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55);
+}
+
 .hero-title-block h1 {
   max-width: 900px;
   color: #fff7ef;
@@ -598,7 +610,7 @@ h2 {
   aspect-ratio: 1;
   border: 4px solid rgba(255, 255, 255, 0.85);
   border-radius: 50%;
-  background: var(--copper);
+  background: var(--plum);
   color: #fff7ef;
   font-size: 27px;
   font-weight: 900;
@@ -611,16 +623,17 @@ h2 {
   0%,
   100% {
     transform: rotate(-4deg) scale(1);
-    box-shadow: 0 0 0 0 rgba(201, 120, 67, 0.55);
+    box-shadow: 0 0 0 0 rgba(156, 26, 94, 0.55);
   }
   50% {
     transform: rotate(-4deg) scale(1.06);
-    box-shadow: 0 0 0 16px rgba(201, 120, 67, 0);
+    box-shadow: 0 0 0 16px rgba(156, 26, 94, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-deadline {
+  .hero-deadline,
+  .hero-price-stack strong {
     animation: none;
   }
 }
@@ -662,9 +675,23 @@ h2 {
 
 .hero-price-stack strong {
   margin-top: 8px;
-  color: var(--brand-navy);
+  color: var(--plum);
   font-size: clamp(38px, 4.7vw, 72px);
   font-variant-numeric: tabular-nums;
+  animation: price-glow 2.2s ease-in-out infinite;
+}
+
+/* 2억원대/3억원대 강조 — 은은한 확대 + 자주색 글로우 펄스 */
+@keyframes price-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    text-shadow: 0 0 0 rgba(156, 26, 94, 0);
+  }
+  50% {
+    transform: scale(1.04);
+    text-shadow: 0 6px 26px rgba(156, 26, 94, 0.45);
+  }
 }
 
 .hero-panel-note {
@@ -1385,6 +1412,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   gap: clamp(24px, 4vw, 52px);
+  overflow-x: clip; /* 슬라이드 등장 시 가로 스크롤 방지 */
 }
 
 .document-stack .doc-heading {
@@ -1603,7 +1631,8 @@ h2 {
   }
 }
 
-.location-cards {
+/* 프리미엄 1~6 카드 — 스크롤 시 문서 순서대로 순차 등장(reveal 시차는 script.js) */
+.premium-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: clamp(12px, 1.4vw, 20px);
@@ -1611,7 +1640,7 @@ h2 {
   margin: 16px auto 0;
 }
 
-.location-cards img {
+.premium-grid img {
   display: block;
   width: 100%;
   padding: clamp(6px, 1vw, 14px);
@@ -1622,7 +1651,7 @@ h2 {
 }
 
 @media (max-width: 720px) {
-  .location-cards {
+  .premium-grid {
     grid-template-columns: 1fr;
   }
 }
@@ -2252,12 +2281,28 @@ body.privacy-open {
   transform: none;
 }
 
+/* 우→좌 슬라이드 등장 변형 — 반투명 상태에서 시작해 선명해진다 */
+.js .reveal.reveal-slide {
+  opacity: 0.35;
+  transform: translateX(min(90px, 14vw));
+}
+
+.js .reveal.reveal-slide.is-animated {
+  transition: opacity 1.6s ease, transform 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js .reveal.reveal-slide.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .js .reveal {
+  .js .reveal,
+  .js .reveal.reveal-slide {
     opacity: 1;
     transform: none;
     transition: none;
@@ -2890,6 +2935,44 @@ body.privacy-open {
 .press-card:hover .press-more,
 .press-card:focus-visible .press-more {
   transform: translateX(4px);
+}
+
+/* 스크랩 그리드는 행 높이를 공유하지 않음 — 한 카드를 펼쳐도 옆 카드는 원래 높이 유지 */
+.press-grid-scrap {
+  align-items: start;
+}
+
+/* 링크 없는 기사 스크랩 — <details> 펼쳐보기 */
+details.press-scrap summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  cursor: pointer;
+}
+
+details.press-scrap summary::-webkit-details-marker {
+  display: none;
+}
+
+details.press-scrap .press-more::before {
+  content: "펼쳐보기 +";
+}
+
+details.press-scrap[open] .press-more::before {
+  content: "접기 −";
+}
+
+.press-body {
+  margin: 14px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--line);
+  color: color-mix(in srgb, var(--ink) 74%, white);
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.7;
+  word-break: keep-all;
+  white-space: pre-line; /* 붙여넣은 일반 텍스트의 줄바꿈/문단이 그대로 표시됨 */
 }
 
 .gallery-grid {
