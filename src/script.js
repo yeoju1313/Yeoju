@@ -23,6 +23,14 @@ const closeNavigation = () => {
 navToggle?.addEventListener("click", () => {
   const isOpen = header?.classList.toggle("is-nav-open") || false;
   navToggle.setAttribute("aria-expanded", String(isOpen));
+
+  if (isOpen && navLinks) {
+    const current = navLinks.querySelector('[aria-current="page"]');
+    if (current) {
+      const delta = current.getBoundingClientRect().top - navLinks.getBoundingClientRect().top;
+      navLinks.scrollTop = Math.max(0, navLinks.scrollTop + delta - 56);
+    }
+  }
 });
 
 navLinks?.addEventListener("click", (event) => {

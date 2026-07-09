@@ -2502,6 +2502,7 @@ body.privacy-open {
     right: 12px;
     top: calc(100% + 8px);
     display: grid;
+    grid-template-columns: 1fr;
     max-height: min(72svh, 560px);
     overflow-y: auto;
     padding: 12px;
@@ -2529,6 +2530,7 @@ body.privacy-open {
 
   .nav-group {
     display: grid;
+    grid-template-columns: 1fr;
     align-self: auto;
     border-bottom: 1px solid rgba(22, 36, 33, 0.1);
   }
@@ -2556,6 +2558,7 @@ body.privacy-open {
   .submenu {
     position: static;
     display: grid;
+    grid-template-columns: 1fr;
     min-width: 0;
     padding: 0 0 10px 12px;
     border: 0;
@@ -2569,7 +2572,7 @@ body.privacy-open {
 
   .submenu a {
     justify-content: flex-start;
-    min-height: 34px;
+    min-height: 44px;
     padding: 0 10px;
     color: rgba(22, 36, 33, 0.72);
     font-size: 14px;
