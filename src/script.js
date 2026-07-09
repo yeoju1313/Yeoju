@@ -267,8 +267,8 @@ leadForms.forEach((form) => {
 
 const revealTargets = new Set(document.querySelectorAll(".reveal"));
 document.querySelectorAll("main img").forEach((image) => {
-  // 메인 배너(hero)는 전용 등장 효과를 쓰므로 스크롤 reveal에서 제외
-  if (image.closest(".hero")) {
+  // 메인 배너(hero)는 전용 등장 효과, 유니트 쇼케이스는 자체 슬라이드 전환을 쓰므로 스크롤 reveal에서 제외
+  if (image.closest(".hero") || image.closest(".unit-showcase")) {
     return;
   }
   revealTargets.add(image);
@@ -294,6 +294,10 @@ const showTarget = (target) => {
 };
 
 if ("IntersectionObserver" in window) {
+  // 시차를 배치(줄) 단위로 리셋하지 않고 전역 예약 시각으로 이어간다
+  // → 스크롤로 나중에 잡힌 요소도 앞 요소에 이어서 순차 등장
+  const STAGGER_MS = 120;
+  let lastRevealAt = 0;
   const revealObserver = new IntersectionObserver(
     (entries, observer) => {
       // 같은 배치에 함께 들어온 요소는 문서 순서대로 시차를 두고 등장
@@ -303,8 +307,11 @@ if ("IntersectionObserver" in window) {
         .sort((a, b) =>
           a.target.compareDocumentPosition(b.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1
         );
-      incoming.forEach((entry, index) => {
-        entry.target.style.transitionDelay = `${index * 180}ms`;
+      const now = performance.now();
+      incoming.forEach((entry) => {
+        const startAt = Math.max(now, lastRevealAt + STAGGER_MS);
+        lastRevealAt = startAt;
+        entry.target.style.transitionDelay = `${Math.round(startAt - now)}ms`;
         entry.target.addEventListener(
           "transitionend",
           () => {

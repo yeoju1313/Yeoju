@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "Seoul Hangang";
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/SeoulHangang-Bold.woff2") format("woff2"), url("../assets/fonts/SeoulHangang-Bold.woff") format("woff");
+}
+
 :root {
   --ink: #162421;
   --deep: #073d3a;
@@ -84,6 +91,13 @@ html {
 
 html {
   scroll-behavior: smooth;
+}
+
+/* reveal-slide의 translateX 시작 위치가 뷰포트 폭을 넓히지 않도록 가로 오버플로 차단 */
+html,
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
@@ -524,8 +538,8 @@ h2 {
 .hero-tagline {
   margin: 0 0 12px;
   color: #fff7ef;
-  font-family: "Gowun Batang", serif;
-  font-size: clamp(17px, 2.1vw, 30px);
+  font-family: "Seoul Hangang", "Gowun Batang", serif;
+  font-size: clamp(21px, 2.7vw, 38px);
   font-weight: 700;
   line-height: 1.5;
   word-break: keep-all;
@@ -1431,41 +1445,93 @@ h2 {
   width: min(100%, 1680px);
 }
 
-/* 유니트 실물 영상 (세로 9:16) */
-.unit-video-grid {
+/* 유니트 쇼케이스: 좌측 영상(16:9) + 우측 사진(3:4) + 하단 썸네일 슬라이드 */
+.unit-chip {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--brand-navy);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85em;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.unit-showcase {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(18px, 3vw, 40px);
-  width: min(100%, 900px);
-  margin: 0 auto;
+  /* 2.37fr:1fr — 16:9 영상과 3:4 사진의 높이가 정확히 일치하는 비율 */
+  grid-template-columns: minmax(0, 2.37fr) minmax(0, 1fr);
+  gap: clamp(14px, 1.8vw, 24px);
+  /* 문서형 페이지(.document-section img)와 동일한 컨텐츠 폭 */
+  width: min(100%, 1400px);
+  margin: 0 auto clamp(40px, 5vw, 64px);
 }
 
-.unit-video-card {
-  margin: 0;
-}
-
-.unit-video-card video {
+.unit-showcase video {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 9 / 16;
-  border-radius: 16px;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
   background: #000;
   box-shadow: var(--shadow);
 }
 
-.unit-video-card figcaption {
-  margin-top: 12px;
-  text-align: center;
-  color: var(--deep);
-  font-weight: 800;
-  font-size: clamp(15px, 1.4vw, 18px);
+.showcase-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  transition: opacity 0.22s ease;
 }
 
-@media (max-width: 620px) {
-  .unit-video-grid {
+.showcase-thumbs {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: safe center;
+  gap: clamp(10px, 1.2vw, 16px);
+  overflow-x: auto;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+}
+
+.showcase-thumb {
+  flex: 0 0 auto;
+  width: clamp(76px, 7vw, 112px);
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.showcase-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-thumb.is-active,
+.showcase-thumb:hover {
+  opacity: 1;
+  border-color: var(--brand);
+}
+
+@media (max-width: 860px) {
+  .unit-showcase {
     grid-template-columns: 1fr;
-    max-width: 420px;
+  }
+  .showcase-photo {
+    aspect-ratio: 4 / 3;
   }
 }
 
@@ -2273,7 +2339,7 @@ body.privacy-open {
 }
 
 .js .reveal.is-animated {
-  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .js .reveal.is-visible {
@@ -2937,10 +3003,7 @@ body.privacy-open {
   transform: translateX(4px);
 }
 
-/* 스크랩 그리드는 행 높이를 공유하지 않음 — 한 카드를 펼쳐도 옆 카드는 원래 높이 유지 */
-.press-grid-scrap {
-  align-items: start;
-}
+/* 스크랩 그리드는 행 높이를 공유해 카드 크기를 통일 (짧은 카드는 아래 여백 허용) */
 
 /* 링크 없는 기사 스크랩 — <details> 펼쳐보기 */
 details.press-scrap summary {
@@ -2975,6 +3038,14 @@ details.press-scrap[open] .press-more::before {
   white-space: pre-line; /* 붙여넣은 일반 텍스트의 줄바꿈/문단이 그대로 표시됨 */
 }
 
+/* 스크랩 기사 썸네일 — 접힌 상태에서도 보이도록 summary 상단에 배치, 16:9 크롭으로 카드 높이 통일 */
+details.press-scrap summary img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -3000,6 +3071,14 @@ details.press-scrap[open] .press-more::before {
   transform: scale(1.06);
 }
 
+/* 모바일 1열에선 고정 높이(200px)가 가로로 넓게 잘려 보여 정사각 비율로 표시 */
+@media (max-width: 720px) {
+  .gallery-item img {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+}
+
 .promo-cat-title {
   margin: clamp(40px, 5vw, 64px) 0 clamp(16px, 2.4vw, 24px);
   color: var(--deep);
@@ -3010,10 +3089,4 @@ details.press-scrap[open] .press-more::before {
 
 .section-heading + .promo-cat-title {
   margin-top: 0;
-}
-
-/* 유니트 실물사진: 세로(3:4) 원본 비율 유지 */
-.unit-shots .gallery-item img {
-  height: auto;
-  aspect-ratio: 3 / 4;
 }
